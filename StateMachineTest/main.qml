@@ -9,33 +9,54 @@ Window {
     width: 640
     height: 480
     visible: true
-    title: qsTr("Hello World")
+    title: qsTr("")
     
     StateMachine {
         id:stateMachine
         onEventOutput: {
-            console.log("onEventOutput " + outEvent)
+            var eventOutMsg = "onEventOutput " + outEvent
+            console.log(eventOutMsg)
+            eventLogTest.text += eventOutMsg + "\n"
         }
         onStateChanged: {
-            console.log("onEventOutput " + outEvent)
+            console.log("onStateChanged " + this.state)
         }
     }
+    RowLayout {
+        anchors.fill:parent
+        Item {
+            Layout.fillWidth:true
+            Layout.fillHeight:true
+            ColumnLayout {
+                Text {
+                    text: "current state:" + stateMachine.state
+                }
 
-    ColumnLayout {
-        Button {
-            width:200
-            height:50
-            onClicked: {
-                stateMachine.trigger(StateMachine.InEvent1)
+                Button {
+                    width:200
+                    height:50
+                    text:"StateMachine.InEvent1"
+                    onClicked: {
+                        stateMachine.trigger(StateMachine.InEvent1)
+                    }
+                }
+                Button {
+                    width:200
+                    height:50
+                    text:"StateMachine.InEvent2"
+                    onClicked: {
+                        stateMachine.trigger(StateMachine.InEvent2)
+                    }
+                }
             }
         }
-        Button {
-            width:200
-            height:50
-            onClicked: {
-                stateMachine.trigger(StateMachine.InEvent2)
+        Item {
+            Layout.fillWidth:true
+            Layout.fillHeight:true
+            Text {
+                id:eventLogTest
+                text:"eventLog \n"
             }
         }
     }
-
 }

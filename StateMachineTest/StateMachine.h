@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QList>
 
+
 class StateMachine : public QObject
 {
     Q_OBJECT
@@ -27,8 +28,11 @@ public:
     Q_ENUM(InEvent)
     Q_ENUM(OutEvent)
     Q_ENUM(State)
+    Q_PROPERTY(StateMachine::State state READ state NOTIFY stateChanged)
+    StateMachine::State state() const;
 
     Q_INVOKABLE bool trigger(StateMachine::InEvent event);
+
 
 private:
     bool stateMachineLoop();

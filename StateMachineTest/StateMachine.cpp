@@ -3,7 +3,7 @@
 
 StateMachine::StateMachine(QObject *parent) : QObject(parent)
 {
-    qDebug() << __func__;
+    qDebug() << QString(__FILE__).split("/").last() << ":" << __func__;
     m_pInEventDequeueTimer = new(std::nothrow) QTimer(this);
     m_pInEventDequeueTimer->setInterval(1000);
     connect(m_pInEventDequeueTimer, &QTimer::timeout, this, [=]() {
@@ -14,13 +14,17 @@ StateMachine::StateMachine(QObject *parent) : QObject(parent)
 
 bool StateMachine::trigger(StateMachine::InEvent event)
 {
-    qDebug() << __func__;
+    qDebug() << QString(__FILE__).split("/").last() << ":" <<  __func__ << event;
     m_inEventStack.append(event);
     return true;
 }
 
 bool StateMachine::stateMachineLoop()
 {
+    if (!m_inEventStack.isEmpty()){
+        qDebug() << "current stack" << m_inEventStack;
+    }
+
     this->_processEventStack();
     this->_do();
     m_pInEventDequeueTimer->start();
@@ -29,7 +33,7 @@ bool StateMachine::stateMachineLoop()
 
 bool StateMachine::_do()
 {
-    qDebug() << __func__;
+//    qDebug() << QString(__FILE__).split("/").last() << ":" << __func__;
     switch(m_state) {
     case StateMachine::State::State1:
         _state1Do();
@@ -51,7 +55,7 @@ bool StateMachine::_do()
 
 bool StateMachine::_processEventStack()
 {
-    qDebug() << __func__;
+//    qDebug() << QString(__FILE__).split("/").last() << ":" << __func__;
     if (m_inEventStack.isEmpty()) {
         // 処理するイベントなし.
 
@@ -137,50 +141,55 @@ bool StateMachine::_processEventStack()
 
 bool StateMachine::_state1Do()
 {
-    qDebug() << __func__;
+    qDebug() << QString(__FILE__).split("/").last() << ":" << __func__;
     return true;
 }
 
 bool StateMachine::_state1Entry()
 {
-    qDebug() << __func__;
+    qDebug() << QString(__FILE__).split("/").last() << ":" << __func__;
     return true;
 }
 
 bool StateMachine::_state1Exit()
 {
-    qDebug() << __func__;
+    qDebug() << QString(__FILE__).split("/").last() << ":" << __func__;
     return true;
 }
 
 bool StateMachine::_state2Do()
 {
-    qDebug() << __func__;
+    qDebug() << QString(__FILE__).split("/").last() << ":" << __func__;
     return true;
 }
 
 bool StateMachine::_state2Entry()
 {
-    qDebug() << __func__;
+    qDebug() << QString(__FILE__).split("/").last() << ":" << __func__;
     return true;
 }
 
 bool StateMachine::_state2Exit()
 {
-    qDebug() << __func__;
+    qDebug() << QString(__FILE__).split("/").last() << ":" << __func__;
     return true;
 }
 
 bool StateMachine::_action1()
 {
-    qDebug() << __func__;
+    qDebug() << QString(__FILE__).split("/").last() << ":" << __func__;
     emit eventOutput(StateMachine::OutEvent::OutEvent1);
     return true;
 }
 
 bool StateMachine::_action2()
 {
-    qDebug() << __func__;
+    qDebug() << QString(__FILE__).split("/").last() << ":" << __func__;
     emit eventOutput(StateMachine::OutEvent::OutEvent2);
     return true;
+}
+
+StateMachine::State StateMachine::state() const
+{
+    return m_state;
 }
